@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import pandas as pd
 
-MONGO_URI = "mongodb+srv://aneesh:<db_password>@cluster65664.az03p.mongodb.net/"
+MONGO_URI = "mongodb+srv://aneesh:LizHanks@cluster65664.az03p.mongodb.net/"
 DB_NAME = "Project-CSE-482"
 
 def flatten_header(l1: str, l2: str):
@@ -91,5 +91,15 @@ def add_stats(file: str, season: int):
     print(f"Update completed for {season}")
 
 def update_all_seasons(file_path, start, end):
+    """Update stats from files fofr all seasons in range start to end
+
+    Args:
+        file_path: File path to stats folder
+        start: Starting season year (YYYY format)
+        end: Ending season year (YYYY format)
+    Returns: None
+    Prints: Team names where no match could be found. Likely points to missing data in db
+    """
     for season in range(start, end + 1):
-        add_stats(f"{file_path}{season}.txt", season)
+        # season names are stored in db in YY format, file names are in YYYY format
+        add_stats(f"{file_path}{season}.txt", season - 2000)
