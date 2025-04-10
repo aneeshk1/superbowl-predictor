@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import pandas as pd
 
-MONGO_URI = "mongodb+srv://aneesh:stanley5@cluster65664.az03p.mongodb.net/"
+MONGO_URI = "mongodb+srv://aneesh:<db_password>@cluster65664.az03p.mongodb.net/"
 DB_NAME = "Project-CSE-482"
 
 def flatten_header(l1: str, l2: str):
