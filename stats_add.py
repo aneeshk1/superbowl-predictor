@@ -43,14 +43,16 @@ def make_df(file: str):
     return df
 
 
-def add_stats(file: str, season: int):
+def add_stats(file: str, season: int, is_defense: bool):
     """Add stats from a txt file to the mongodb database
 
     Matches rows based on teams and updates accordingly
     Does AFC then NFC database according to the season number provided
+    If defensive stat, prepend D to header
     Args:
         file: Input txt file to read from 
         season: season for which to add stats to add(YY format)
+        is_defense: Is the df for defensive stats
     Returns:
         None
     """
@@ -61,7 +63,10 @@ def add_stats(file: str, season: int):
     NFC = db[f"NFC {season}"]
 
     # Convert DataFrame to a list of dictionaries (one per row)
-    csv_data = make_df(file).to_dict("records")
+    csv_data = make_df(file)
+    if is_defense:  # prepend a D if defensive stat column
+        csv_data = csv_data.add_prefix('D ')
+    csv_data = csv_data.to_dict('records')
 
     # For each row in CSV, update MongoDB if 'Tm' matches
     for row in csv_data:
@@ -90,7 +95,7 @@ def add_stats(file: str, season: int):
 
     print(f"Update completed for {season}")
 
-def update_all_seasons(file_path, start, end):
+def update_all_seasons(file_path, start, end, is_defense: False):
     """Update stats from files fofr all seasons in range start to end
 
     Args:
@@ -102,4 +107,4 @@ def update_all_seasons(file_path, start, end):
     """
     for season in range(start, end + 1):
         # season names are stored in db in YY format, file names are in YYYY format
-        add_stats(f"{file_path}{season}.txt", season - 2000)
+        add_stats(f"{file_path}{season}.txt", season - 2000, is_defense)
