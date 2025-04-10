@@ -90,7 +90,6 @@ def add_stats(file: str, season: int):
 
     print(f"Update completed for {season}")
 
-def update_all_seasons(start, end):
+def update_all_seasons(file_path, start, end):
     for season in range(start, end + 1):
-        add_stats(f"off/{season}.txt", season)
-
+        add_stats(f"{file_path}{season}.txt", season)
