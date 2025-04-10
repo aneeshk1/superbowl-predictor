@@ -66,6 +66,7 @@ def add_stats(file: str, season: int, is_defense: bool):
     csv_data = make_df(file)
     if is_defense:  # prepend a D if defensive stat column
         csv_data = csv_data.add_prefix('D ')
+        csv_data.rename(columns={'D Tm': 'Tm'}, inplace=True)
     csv_data = csv_data.to_dict('records')
 
     # For each row in CSV, update MongoDB if 'Tm' matches
