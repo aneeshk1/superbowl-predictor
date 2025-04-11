@@ -69,10 +69,22 @@ def add_stats(file: str, season: int, is_defense: bool):
         csv_data.rename(columns={'D Tm': 'Tm'}, inplace=True)
     csv_data = csv_data.to_dict('records')
 
+    def convert(x):
+        """Quick function to convert a str to int or double if possible"""
+        if not isinstance(x, str):
+            return x
+        try:
+            f = float(x)
+            if f.is_integer():
+                return int(f)
+            return f
+        except:
+            return x
+        
     # For each row in CSV, update MongoDB if 'Tm' matches
     for row in csv_data:
         tm_value = row.get("Tm")
-        update_data = {k: v for k, v in row.items()}
+        update_data = {k: convert(v) for k, v in row.items()}
 
         # Update MongoDB document where 'Tm' matches for AFC teams
         result1 = AFC.update_one(
